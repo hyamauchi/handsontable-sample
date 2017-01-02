@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" ng-app="myApp">
+<html lang="ja">
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -7,11 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HANDSONTABLEのサンプル</title>
   <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.3.1/ui-bootstrap-tpls.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
   <link rel="stylesheet" type="text/css" href="//docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.css">
   <link rel="stylesheet" type="text/css" href="//handsontable.com/static/css/main.css">
   <script src="//docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
@@ -28,13 +23,13 @@
   </style>
 </head>
 <body>
-<div ng-controller="MainController as main">
-  <div class="container" ng-init="main.init()">
+<div>
+  <div class="container">
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="row">
           <div class="col-xs-12">
-            <button class="btn btn-primary" ng-click="main.downloadCSV()">Excel出力</button>
+            <button class="btn btn-primary" id="downloadCSV">Excel出力</button>
           </div>
         </div>
       </div>
