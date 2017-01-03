@@ -104,6 +104,132 @@
     };
 
     document.getElementById('downloadCSV').addEventListener('click', downloadCSV, false);
+
+
+    var X = XLSX;
+
+    function to_csv(workbook) {
+      var result = [];
+      workbook.SheetNames.forEach(function(sheetName) {
+        var csv = X.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+        if(csv.length > 0){
+          result.push("SHEET: " + sheetName);
+          result.push("");
+          result.push(csv);
+        }
+      });
+      return result.join("\n");
+    }
+
+    function to_json(workbook) {
+      var result = {};
+      workbook.SheetNames.forEach(function(sheetName) {
+        var roa = X.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+        if(roa.length > 0){
+          result[sheetName] = roa;
+        }
+      });
+      return result;
+    }
+
+    function dump(workbook) {
+      var rows = [];
+      var columns = [];
+      var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      for (var z in worksheet) {
+        /* all keys that do not begin with "!" correspond to cell addresses */
+        if(z[0] === '!') continue;
+        console.log(z + "=" + JSON.stringify(worksheet[z].v));
+
+        var cellAddr = z.match( /([A-Z])(\d)/ );
+        var idx = cellAddr[2] - 1;
+        var row = rows[idx];
+        if (!row) row = {};
+        row[cellAddr[1]] = worksheet[z].v;
+        rows[idx] = row;
+
+        var newCol = true;
+        for (var i = 0; i < columns.length; i++) {
+          if (columns[i].data == cellAddr[1]) {
+            newCol = false;
+            break;
+          }
+        }
+        if (newCol) columns.push({
+          data: cellAddr[1],
+          type: worksheet[z].t == 'n' ? 'numeric' : 'text'
+        });
+      }
+
+      var colHeaders = [];
+      columns.forEach(function(col){
+        colHeaders.push(col.data);
+      });
+
+      dataObject = rows;
+      var hotSettings = {
+        data: dataObject,
+        columns: columns,
+        // stretchH: 'all',
+        width: 806,
+        autoWrapRow: true,
+        height: 441,
+        maxRows: rows.length,
+        maxColumns: columns.length,
+        rowHeaders: true,
+        colHeaders: colHeaders
+      };
+      hot = new Handsontable(hotElement, hotSettings);
+    }
+
+    function process_wb(wb) {
+      // var output = to_csv(wb);
+      // var output = to_json(wb);
+      var output = dump(wb);
+      console.dir(output);
+    }
+
+    var drop = document.getElementById('drop');
+    function handleDrop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      var files = e.dataTransfer.files;
+      var f = files[0];
+      importXls(f);
+    }
+
+    function importXls(f) {
+      var reader = new FileReader();
+      var name = f.name;
+      reader.onload = function (e) {
+        var data = e.target.result;
+        var wb = X.read(data, {type: 'binary'});
+        process_wb(wb);
+      };
+      reader.readAsBinaryString(f);
+    }
+
+    function handleDragover(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    }
+
+    if (drop.addEventListener) {
+      drop.addEventListener('dragenter', handleDragover, false);
+      drop.addEventListener('dragover', handleDragover, false);
+      drop.addEventListener('drop', handleDrop, false);
+    }
+
+    var xlf = document.getElementById('xlf');
+    function handleFile(e) {
+      var files = e.target.files;
+      var f = files[0];
+      importXls(f);
+    }
+
+    if (xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+
   });
 
 })();

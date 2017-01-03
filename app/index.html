@@ -17,8 +17,19 @@
   <style>
     .container {
       /* font-family:"游ゴシック",YuGothic,"ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","メイリオ",Meiryo,Arial,sans-serif; */
-      font-family: 'Noto Sans Japanese',"Helvetica Neue",Helvetica,'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ',Meiryo,'ＭＳ Ｐゴシック',Verdana,sans-serif;
+      font-family: 'Noto Sans Japanese', "Helvetica Neue", Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', Verdana, sans-serif;
       margin-top: 20px;
+    }
+
+    #drop {
+      border: 2px dashed #bbb;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      padding: 25px;
+      text-align: center;
+      font: 20pt bold, "Vollkorn";
+      color: #bbb
     }
   </style>
 </head>
@@ -34,6 +45,8 @@
         </div>
       </div>
       <div class="panel-body">
+        <div id="drop">読み込む XLSX ファイルを ここにドラッグアンドドロップ</div>
+        <p><input type="file" name="xlfile" id="xlf" /></p>
         <div id="hot"></div>
       </div>
     </div>
