@@ -132,7 +132,7 @@
       return result;
     }
 
-    function dump(workbook) {
+    function importToHot(workbook) {
       var rows = [];
       var columns = [];
       var worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -141,7 +141,7 @@
         if(z[0] === '!') continue;
         console.log(z + "=" + JSON.stringify(worksheet[z].v));
 
-        var cellAddr = z.match( /([A-Z])(\d)/ );
+        var cellAddr = z.match( /^([A-Z]+)(\d+)$/ );
         var idx = cellAddr[2] - 1;
         var row = rows[idx];
         if (!row) row = {};
@@ -161,17 +161,28 @@
         });
       }
 
+      columns.sort(function(a, b){
+        if (a.data.length < b.data.length) return -1;
+        if (a.data.length > b.data.length) return 1;
+        if (a.data < b.data) return -1;
+        if (a.data > b.data) return 1;
+        return 0;
+      });
+
       var colHeaders = [];
       columns.forEach(function(col){
         colHeaders.push(col.data);
       });
+
+      var elm = document.getElementById('drop');
 
       dataObject = rows;
       var hotSettings = {
         data: dataObject,
         columns: columns,
         // stretchH: 'all',
-        width: 806,
+        // preventOverflow: 'horizontal',
+        width: elm.clientWidth,
         autoWrapRow: true,
         height: 441,
         maxRows: rows.length,
@@ -179,14 +190,15 @@
         rowHeaders: true,
         colHeaders: colHeaders
       };
+      hot.destroy();
       hot = new Handsontable(hotElement, hotSettings);
     }
 
     function process_wb(wb) {
       // var output = to_csv(wb);
       // var output = to_json(wb);
-      var output = dump(wb);
-      console.dir(output);
+      // console.dir(output);
+      importToHot(wb);
     }
 
     var drop = document.getElementById('drop');
