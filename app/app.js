@@ -145,7 +145,7 @@
         var idx = cellAddr[2] - 1;
         var row = rows[idx];
         if (!row) row = {};
-        row[cellAddr[1]] = worksheet[z].v;
+        row[cellAddr[1]] = worksheet[z].w;
         rows[idx] = row;
 
         var newCol = true;
